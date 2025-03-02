@@ -1,0 +1,531 @@
+-- 4.
+CREATE TABLE clienti(
+    client_id NUMBER(3) PRIMARY KEY,
+    nume VARCHAR(50) NOT NULL,
+    varsta NUMBER(3),
+    nr_telefon VARCHAR(10) UNIQUE
+);
+
+CREATE TABLE bilete(
+    bilet_id NUMBER(4) PRIMARY KEY,
+    client_id NUMBER(3),
+    film_id NUMBER(3),
+    nr_locuri NUMBER(2) CHECK (nr_locuri<10),
+    pret NUMBER(3) CHECK (pret<1000),
+    angajat_id NUMBER(3),
+    FOREIGN KEY (client_id) REFERENCES clienti(client_id),
+    FOREIGN KEY (film_id) REFERENCES filme(film_id), 
+    FOREIGN KEY (angajat_id) REFERENCES angajati(angajat_id)
+);
+
+
+CREATE TABLE filme(
+    film_id NUMBER(3) PRIMARY KEY,
+    titlul VARCHAR(50) NOT NULL,
+    gen VARCHAR(20),
+    an_lansare DATE,
+    regizor VARCHAR(50),
+    CHECK (an_lansare>=to_date('01-01-2024', 'DD-MM-YYYY') AND an_lansare<=to_date('31-12-2024', 'DD-MM-YYYY')));
+
+
+CREATE TABLE rezervari(
+    bilet_id NUMBER(4),
+    client_id NUMBER(3),
+    film_id NUMBER(3),
+    sala_id NUMBER(2),
+    data_achizitionare DATE NOT NULL, 
+    FOREIGN KEY (bilet_id) REFERENCES bilete(bilet_id),
+    FOREIGN KEY (client_id) REFERENCES clienti(client_id),
+    FOREIGN KEY (film_id) REFERENCES filme(film_id),
+    FOREIGN KEY (sala_id) REFERENCES sali(sala_id),
+    PRIMARY KEY(bilet_id, client_id, film_id)  --cheie primara compusa
+);
+
+CREATE TABLE departamente(
+    departament_id NUMBER(2) PRIMARY KEY,
+    nume_departament VARCHAR(20) UNIQUE
+);
+
+CREATE TABLE angajati(
+    angajat_id NUMBER(3) PRIMARY KEY,
+    departament_id NUMBER(2),
+    nume_angajat VARCHAR(50),
+    specializare VARCHAR(20),
+    salariu NUMBER(5),
+    data_angajare DATE,
+    FOREIGN KEY (departament_id) REFERENCES departamente(departament_id)
+);
+
+CREATE TABLE sali(
+    sala_id NUMBER(2) PRIMARY KEY,
+    capacitate NUMBER(2) CHECK (capacitate>0)
+);
+
+CREATE TABLE program(
+    program_id VARCHAR(20) PRIMARY KEY,
+    sala_id NUMBER(2),
+    film_id NUMBER(3),
+    data_incepere DATE,
+    FOREIGN KEY (sala_id) REFERENCES sali(sala_id),
+    FOREIGN KEY (film_id) REFERENCES filme(film_id)
+);
+
+
+-- 5.
+INSERT INTO clienti(client_id, nume, varsta, nr_telefon) VALUES (1, 'Andrei', 20, '0771469060');
+INSERT INTO clienti(client_id, nume, varsta, nr_telefon) VALUES (2, 'Amalia', 22, '0758932147');
+INSERT INTO clienti(client_id, nume, varsta, nr_telefon) VALUES (3, 'Catalin', 45, '0726415983'); 
+INSERT INTO clienti(client_id, nume, varsta, nr_telefon) VALUES (4, 'Mariana', 47, '0743058692');
+INSERT INTO clienti(client_id, nume, varsta, nr_telefon) VALUES (5, 'Bogdan', 16, '0779263815');
+INSERT INTO clienti(client_id, nume, varsta, nr_telefon) VALUES (6, 'Alex', 7, '0715472098');
+INSERT INTO clienti(client_id, nume, varsta, nr_telefon) VALUES (7, 'Karina', 17, '0738106429');
+INSERT INTO clienti(client_id, nume, varsta, nr_telefon) VALUES (8, 'Nicoleta', 41, '0762148359');
+INSERT INTO clienti(client_id, nume, varsta, nr_telefon) VALUES (9, 'Ema', 35, '0719835443');
+INSERT INTO clienti(client_id, nume, varsta, nr_telefon) VALUES (10, 'Antonio', 26, '0723459809');
+INSERT INTO clienti(client_id, nume, varsta, nr_telefon) VALUES (11, 'Rares', 20, '0773572100');
+INSERT INTO clienti(client_id, nume, varsta, nr_telefon) VALUES (12, 'Marius', 55, '0727301854');
+
+
+INSERT INTO bilete(bilet_id, client_id, film_id, nr_locuri, pret, angajat_id) VALUES (1, 1, 1, 1, 20, 4);
+INSERT INTO bilete(bilet_id, client_id, film_id, nr_locuri, pret, angajat_id) VALUES (2, 2, 3, 2, 40, 4);
+INSERT INTO bilete(bilet_id, client_id, film_id, nr_locuri, pret, angajat_id) VALUES (3, 3, 4, 1, 30, 5);
+INSERT INTO bilete(bilet_id, client_id, film_id, nr_locuri, pret, angajat_id) VALUES (4, 4, 5, 4, 120, 6);
+INSERT INTO bilete(bilet_id, client_id, film_id, nr_locuri, pret, angajat_id) VALUES (5, 5, 7, 2, 40, 6);
+INSERT INTO bilete(bilet_id, client_id, film_id, nr_locuri, pret, angajat_id) VALUES (6, 6, 10, 1, 20, 7);
+INSERT INTO bilete(bilet_id, client_id, film_id, nr_locuri, pret, angajat_id) VALUES (7, 7, 9, 3, 60, 5);
+INSERT INTO bilete(bilet_id, client_id, film_id, nr_locuri, pret, angajat_id) VALUES (8, 8, 2, 2, 60, 4);
+INSERT INTO bilete(bilet_id, client_id, film_id, nr_locuri, pret, angajat_id) VALUES (9, 9, 6, 1, 30, 7);
+INSERT INTO bilete(bilet_id, client_id, film_id, nr_locuri, pret, angajat_id) VALUES (10, 10, 8, 5, 150, 6);
+INSERT INTO bilete(bilet_id, client_id, film_id, nr_locuri, pret, angajat_id) VALUES (11, 11, 5, 3, 60, 4);
+INSERT INTO bilete(bilet_id, client_id, film_id, nr_locuri, pret, angajat_id) VALUES (12, 12, 10, 1, 30, 4);
+INSERT INTO bilete(bilet_id, client_id, film_id, nr_locuri, pret, angajat_id) VALUES (13, 1, 9, 2, 40, 4);
+INSERT INTO bilete(bilet_id, client_id, film_id, nr_locuri, pret, angajat_id) VALUES (14, 3, 6, 1, 30, 7);
+
+
+INSERT INTO filme(film_id, titlul, gen, an_lansare, regizor) VALUES (1, 'Forrest Gump', 'Drama', to_date('15-05-2024', 'DD-MM-YYYY'), 'Robert Zemekis');
+INSERT INTO filme(film_id, titlul, gen, an_lansare, regizor) VALUES (2, 'Inception', 'SF', to_date('20-07-2024', 'DD-MM-YYYY'), 'Christopher Nolan');
+INSERT INTO filme(film_id, titlul, gen, an_lansare, regizor) VALUES (3, 'Interstellar', 'SF', to_date('28-03-2024', 'DD-MM-YYYY'), 'Christopher Nolan');
+INSERT INTO filme(film_id, titlul, gen, an_lansare, regizor) VALUES (4, 'Shutter Island', 'Mister', to_date('30-10-2024', 'DD-MM-YYYY'), 'Martin Scorsese');
+INSERT INTO filme(film_id, titlul, gen, an_lansare, regizor) VALUES (5, 'Fast Furious', 'Actiune', to_date('26-05-2024', 'DD-MM-YYYY'), 'Louis Leterrier');
+INSERT INTO filme(film_id, titlul, gen, an_lansare, regizor) VALUES (6, 'Se7en', 'Thriller', to_date('12-08-2024', 'DD-MM-YYYY'), 'David Fincher');
+INSERT INTO filme(film_id, titlul, gen, an_lansare, regizor) VALUES (7, 'The Godfather', 'Actiune', to_date('01-09-2024', 'DD-MM-YYYY'), 'Francis Ford Coppola');
+INSERT INTO filme(film_id, titlul, gen, an_lansare, regizor) VALUES (8, 'Matrix', 'SF', to_date('22-11-2024', 'DD-MM-YYYY'), 'Lilly Wackowski');
+INSERT INTO filme(film_id, titlul, gen, an_lansare, regizor) VALUES (9, 'Dune', 'SF', to_date('07-07-2024', 'DD-MM-YYYY'), 'Denis Villeneuve');
+INSERT INTO filme(film_id, titlul, gen, an_lansare, regizor) VALUES (10, 'Bad Boys', 'Comedie', to_date('16-12-2024', 'DD-MM-YYYY'), 'Michael Bay');
+
+
+INSERT INTO rezervari(bilet_id, client_id, film_id, sala_id, data_achizitionare) VALUES (1, 1, 1, 1, to_date('19-05-2024', 'DD-MM-YYYY'));
+INSERT INTO rezervari(bilet_id, client_id, film_id, sala_id, data_achizitionare) VALUES (2, 2, 3, 2, to_date('28-03-2024', 'DD-MM-YYYY'));
+INSERT INTO rezervari(bilet_id, client_id, film_id, sala_id, data_achizitionare) VALUES (3, 3, 4, 2, to_date('01-11-2024', 'DD-MM-YYYY'));
+INSERT INTO rezervari(bilet_id, client_id, film_id, sala_id, data_achizitionare) VALUES (4, 4, 5, 3, to_date('27-05-2024', 'DD-MM-YYYY'));
+INSERT INTO rezervari(bilet_id, client_id, film_id, sala_id, data_achizitionare) VALUES (5, 5, 7, 4, to_date('16-09-2024', 'DD-MM-YYYY'));
+INSERT INTO rezervari(bilet_id, client_id, film_id, sala_id, data_achizitionare) VALUES (6, 6, 10, 5, to_date('18-12-2024', 'DD-MM-YYYY'));
+INSERT INTO rezervari(bilet_id, client_id, film_id, sala_id, data_achizitionare) VALUES (7, 7, 9, 5, to_date('07-07-2024', 'DD-MM-YYYY'));
+INSERT INTO rezervari(bilet_id, client_id, film_id, sala_id, data_achizitionare) VALUES (8, 8, 2, 1, to_date('25-07-2024', 'DD-MM-YYYY'));
+INSERT INTO rezervari(bilet_id, client_id, film_id, sala_id, data_achizitionare) VALUES (9, 9, 6, 3, to_date('14-08-2024', 'DD-MM-YYYY'));
+INSERT INTO rezervari(bilet_id, client_id, film_id, sala_id, data_achizitionare) VALUES (10, 10, 8, 4, to_date('23-11-2024', 'DD-MM-YYYY'));
+INSERT INTO rezervari(bilet_id, client_id, film_id, sala_id, data_achizitionare) VALUES (11, 11, 5, 3, to_date('26-05-2024', 'DD-MM-YYYY'));
+INSERT INTO rezervari(bilet_id, client_id, film_id, sala_id, data_achizitionare) VALUES (12, 12, 10, 5, to_date('18-12-2024', 'DD-MM-YYYY'));
+INSERT INTO rezervari(bilet_id, client_id, film_id, sala_id, data_achizitionare) VALUES (13, 1, 9, 5, to_date('27-07-2024', 'DD-MM-YYYY'));
+INSERT INTO rezervari(bilet_id, client_id, film_id, sala_id, data_achizitionare) VALUES (14, 3, 6, 3, to_date('28-08-2024', 'DD-MM-YYYY'));
+INSERT INTO rezervari(bilet_id, client_id, film_id, sala_id, data_achizitionare) VALUES (15, 4, 5, 3, to_date('29-05-2024', 'DD-MM-YYYY'));
+
+
+INSERT INTO departamente(departament_id, nume_departament) VALUES (1, 'vanzare');
+INSERT INTO departamente(departament_id, nume_departament) VALUES (2, 'management');
+INSERT INTO departamente(departament_id, nume_departament) VALUES (3, 'resurse umane');
+INSERT INTO departamente(departament_id, nume_departament) VALUES (4, 'marketing');
+INSERT INTO departamente(departament_id, nume_departament) VALUES (5, 'ingrijire');
+
+
+INSERT INTO angajati(angajat_id, departament_id, nume_angajat, specializare, salariu, data_angajare) VALUES (1, 2, 'Copilau Andrei', 'manager', 10000, to_date('14-01-2023', 'DD-MM-YYYY'));
+INSERT INTO angajati(angajat_id, departament_id, nume_angajat, specializare, salariu, data_angajare) VALUES (2, 2, 'Fran Daniela', 'asistent management', 9000, to_date('17-02-2023', 'DD-MM-YYYY'));
+INSERT INTO angajati(angajat_id, departament_id, nume_angajat, specializare, salariu, data_angajare) VALUES (3, 2, 'Alex Constantin', 'asistent management', 8500, to_date('20-02-2023', 'DD-MM-YYYY'));
+INSERT INTO angajati(angajat_id, departament_id, nume_angajat, specializare, salariu, data_angajare) VALUES (4, 1, 'Kobel Dan', 'casier', 3000, to_date('07-07-2023', 'DD-MM-YYYY'));
+INSERT INTO angajati(angajat_id, departament_id, nume_angajat, specializare, salariu, data_angajare) VALUES (5, 1, 'Florentin Rus', 'casier', 3000, to_date('07-07-2023', 'DD-MM-YYYY'));
+INSERT INTO angajati(angajat_id, departament_id, nume_angajat, specializare, salariu, data_angajare) VALUES (6, 1, 'Andu Marian', 'casier', 3500, to_date('02-03-2023', 'DD-MM-YYYY'));
+INSERT INTO angajati(angajat_id, departament_id, nume_angajat, specializare, salariu, data_angajare) VALUES (7, 1, 'Stamate Mircea', 'casier', 4000, to_date('21-04-2023', 'DD-MM-YYYY'));
+INSERT INTO angajati(angajat_id, departament_id, nume_angajat, specializare, salariu, data_angajare) VALUES (8, 3, 'Dumitru Beatrice', 'specialist HR', 5500, to_date('22-02-2023', 'DD-MM-YYYY'));
+INSERT INTO angajati(angajat_id, departament_id, nume_angajat, specializare, salariu, data_angajare) VALUES (9, 3, 'Done Albert', 'specialist HR', 5500, to_date('22-02-2023', 'DD-MM-YYYY'));
+INSERT INTO angajati(angajat_id, departament_id, nume_angajat, specializare, salariu, data_angajare) VALUES (10, 4, 'Gheorghe Mariana', 'brand manager', 6000, to_date('13-03-2023', 'DD-MM-YYYY'));
+INSERT INTO angajati(angajat_id, departament_id, nume_angajat, specializare, salariu, data_angajare) VALUES (11, 4, 'Nichifor Amalia', 'brand manager', 6500, to_date('17-02-2023', 'DD-MM-YYYY'));
+INSERT INTO angajati(angajat_id, departament_id, nume_angajat, specializare, salariu, data_angajare) VALUES (12, 5, 'Ioana Stan', 'ingijitor', 3000, to_date('25-03-2023', 'DD-MM-YYYY'));
+INSERT INTO angajati(angajat_id, departament_id, nume_angajat, specializare, salariu, data_angajare) VALUES (13, 5, 'Serghei Florin', 'ingijitor', 2500, to_date('01-07-2023', 'DD-MM-YYYY'));
+INSERT INTO angajati(angajat_id, departament_id, nume_angajat, specializare, salariu, data_angajare) VALUES (14, 5, 'Ciochina Adriana', 'ingijitor', 2500, to_date('14-05-2023', 'DD-MM-YYYY'));
+INSERT INTO angajati(angajat_id, departament_id, nume_angajat, specializare, salariu, data_angajare) VALUES (15, 5, 'Alexa Andra', 'ingijitor', 2500, to_date('19-05-2023', 'DD-MM-YYYY'));
+
+
+INSERT INTO sali(sala_id, capacitate) VALUES (1, 50);
+INSERT INTO sali(sala_id, capacitate) VALUES (2, 50);
+INSERT INTO sali(sala_id, capacitate) VALUES (3, 60);
+INSERT INTO sali(sala_id, capacitate) VALUES (4, 65);
+INSERT INTO sali(sala_id, capacitate) VALUES (5, 70);
+
+
+INSERT INTO program(program_id, sala_id, film_id, data_incepere) VALUES ('#1', 1, 1, to_date('15-05-2024', 'DD-MM-YYYY'));
+INSERT INTO program(program_id, sala_id, film_id, data_incepere) VALUES ('#2', 1, 2, to_date('20-07-2024', 'DD-MM-YYYY'));
+INSERT INTO program(program_id, sala_id, film_id, data_incepere) VALUES ('#3', 2, 3, to_date('28-03-2024', 'DD-MM-YYYY'));
+INSERT INTO program(program_id, sala_id, film_id, data_incepere) VALUES ('#4', 2, 4, to_date('30-10-2024', 'DD-MM-YYYY'));
+INSERT INTO program(program_id, sala_id, film_id, data_incepere) VALUES ('#5', 3, 5, to_date('26-05-2024', 'DD-MM-YYYY'));
+INSERT INTO program(program_id, sala_id, film_id, data_incepere) VALUES ('#6', 3, 6, to_date('12-08-2024', 'DD-MM-YYYY'));
+INSERT INTO program(program_id, sala_id, film_id, data_incepere) VALUES ('#7', 4, 7, to_date('01-09-2024', 'DD-MM-YYYY'));
+INSERT INTO program(program_id, sala_id, film_id, data_incepere) VALUES ('#8', 4, 8, to_date('22-11-2024', 'DD-MM-YYYY'));
+INSERT INTO program(program_id, sala_id, film_id, data_incepere) VALUES ('#9', 5, 9, to_date('07-07-2024', 'DD-MM-YYYY'));
+INSERT INTO program(program_id, sala_id, film_id, data_incepere) VALUES ('#10', 5, 10, to_date('16-12-2024', 'DD-MM-YYYY'));
+
+
+-- 6.
+CREATE OR REPLACE PROCEDURE f6(id_sala IN NUMBER) IS
+    TYPE tablou_filme IS VARRAY(10) OF VARCHAR2(50);
+    lista_filme tablou_filme;
+    
+    TYPE tablou_clienti IS TABLE OF VARCHAR2(50);
+    lista_clienti tablou_clienti;
+    
+    TYPE tablou_bilete IS TABLE OF NUMBER INDEX BY VARCHAR2(50);
+    bilete_per_film tablou_bilete;
+    
+    total_locuri NUMBER;
+BEGIN
+    SELECT DISTINCT(f.titlul) BULK COLLECT INTO lista_filme
+    FROM filme f 
+    JOIN program p ON f.film_id = p.film_id
+    JOIN sali s ON p.sala_id = s.sala_id
+    WHERE s.sala_id = id_sala;
+    
+    DBMS_OUTPUT.PUT_LINE('Filmele selectate din sala '|| id_sala ||' sunt: ');
+    FOR i IN 1..lista_filme.COUNT LOOP
+        DBMS_OUTPUT.PUT_LINE(lista_filme(i));
+    END LOOP;
+    DBMS_OUTPUT.PUT_LINE('');
+    
+    SELECT c.nume BULK COLLECT INTO lista_clienti
+    FROM clienti c 
+    JOIN rezervari r ON c.client_id = r.client_id
+    JOIN program p ON r.film_id = p.film_id
+    JOIN sali s ON p.sala_id = s.sala_id
+    WHERE s.sala_id = id_sala;
+    
+    DBMS_OUTPUT.PUT_LINE('Clientii din sala '|| id_sala ||' sunt: ');
+    FOR i IN 1..lista_clienti.COUNT LOOP
+        DBMS_OUTPUT.PUT_LINE(lista_clienti(i));
+    END LOOP;
+    DBMS_OUTPUT.PUT_LINE('');
+    
+    FOR i IN 1..lista_filme.COUNT LOOP
+        SELECT SUM(b.nr_locuri) INTO total_locuri
+        FROM bilete b 
+        JOIN filme f ON b.film_id = f.film_id
+        JOIN program p ON f.film_id = p.film_id
+        JOIN sali s ON p.sala_id = s.sala_id
+        WHERE s.sala_id = id_sala AND f.titlul = lista_filme(i);
+        
+        bilete_per_film(lista_filme(i)) := total_locuri;
+    END LOOP;
+    
+    DBMS_OUTPUT.PUT_LINE('Numarul de bilete pentru fiecare film: ');
+    FOR i IN 1..lista_filme.COUNT LOOP
+        DBMS_OUTPUT.PUT_LINE('Filmul '|| lista_filme(i) ||' are nr de bilete vandute: '||bilete_per_film(lista_filme(i)));
+    END LOOP;
+END;
+/
+
+--Apelul procedurii
+BEGIN
+    f6(1);
+END;
+/
+
+
+-- 7.
+CREATE OR REPLACE PROCEDURE f7 IS
+--cursor explicit
+    CURSOR c1 IS
+        SELECT d.departament_id, d.nume_departament, COUNT(a.angajat_id)
+        FROM departamente d JOIN angajati a ON d.departament_id = a.departament_id
+        GROUP BY d.departament_id, d.nume_departament; 
+--cursor parametrizat        
+    CURSOR c2(dep_id departamente.departament_id%TYPE) IS
+        SELECT nume_angajat
+        FROM angajati
+        WHERE departament_id = dep_id;
+        
+    var_id departamente.departament_id%TYPE;
+    var_nume departamente.nume_departament%TYPE;
+    nr_ang NUMBER;
+BEGIN
+    OPEN c1;
+    LOOP
+        FETCH c1 INTO var_id, var_nume, nr_ang;
+        EXIT WHEN c1%NOTFOUND;
+        DBMS_OUTPUT.PUT_LINE('Departamentul '|| var_nume ||' are ' ||nr_ang||' angajati:');
+        FOR i IN c2(var_id) LOOP
+            DBMS_OUTPUT.PUT_LINE('-'|| i.nume_angajat);
+        END LOOP;
+        DBMS_OUTPUT.PUT_LINE('');
+    END LOOP;
+    CLOSE c1;
+END;
+/
+--Apelul subprogramului
+BEGIN
+    f7;
+END;
+/
+
+
+-- 8.
+CREATE OR REPLACE FUNCTION f8(id_c IN NUMBER)
+RETURN VARCHAR2 IS
+    var_nume clienti.nume%TYPE;
+    var_titlu filme.titlul%TYPE;
+    var_data rezervari.data_achizitionare%TYPE;
+    var_mesaj VARCHAR2(100);
+BEGIN
+    SELECT c.nume, f.titlul, r.data_achizitionare 
+    INTO var_nume, var_titlu, var_data
+    FROM clienti c JOIN rezervari r ON c.client_id = r.client_id
+                   JOIN filme f ON r.film_id = f.film_id
+    WHERE c.client_id = id_c;
+    
+    var_mesaj := 'Client: ' || var_nume || ', Film: ' || var_titlu || ', Data achiztionarii: ' || var_data;
+    RETURN var_mesaj;
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        RAISE_APPLICATION_ERROR(-20001, 'Nu au fost gasite date pentru clientul respectiv.'); 
+    WHEN TOO_MANY_ROWS THEN
+        RAISE_APPLICATION_ERROR(-20002, 'Prea multe rezervari pentru clientul respectiv.');
+    WHEN OTHERS THEN
+        RAISE_APPLICATION_ERROR(-20003, 'Alta eroare!');
+END f8;
+/
+
+--Pentru primul caz alegem clientul cu id-ul 1, care a realizat mai multe rezervari 
+BEGIN 
+-- Pentru clientul 1:
+    DBMS_OUTPUT.PUT_LINE(f8(1));
+END;
+/
+
+--Pentru acest caz alegerm clientul 2 pentru care se vor afisa informatiile resepctive
+BEGIN
+-- Pentru clientul 2: 
+    DBMS_OUTPUT.PUT_LINE(f8(2));
+END;
+/
+
+--Pentru ultimul caz alegem un client inexistent
+BEGIN
+-- Pentru un client inexistent: 
+    DBMS_OUTPUT.PUT_LINE(f8(15));
+END;
+/
+
+
+-- 9.
+CREATE OR REPLACE PROCEDURE f9(id_client IN NUMBER, id_film IN NUMBER)
+IS
+    ex_film_inexistent EXCEPTION;
+    ex_rezervare_inexistenta EXCEPTION;
+    
+    var_client NUMBER;
+    var_film NUMBER;
+    nr_rezervari NUMBER;
+    var_varsta clienti.varsta%TYPE;
+    
+    var_nume clienti.nume%TYPE;
+    var_titlu filme.titlul%TYPE;
+    var_data rezervari.data_achizitionare%TYPE;
+    var_sala sali.sala_id%TYPE;
+    var_pret bilete.pret%TYPE;
+    var_angajat angajati.nume_angajat%TYPE;
+BEGIN
+    SELECT COUNT(*) INTO var_client
+    FROM clienti
+    WHERE client_id = id_client;
+    
+    IF var_client = 0 THEN 
+        RAISE NO_DATA_FOUND;
+    END IF;
+    
+    SELECT COUNT(*) INTO var_film
+    FROM filme
+    WHERE film_id = id_film;
+    
+    IF var_film = 0 THEN
+        RAISE ex_film_inexistent;
+    END IF;
+    
+    SELECT COUNT(*) INTO nr_rezervari
+    FROM rezervari
+    WHERE client_id = id_client AND film_id = id_film;
+    
+    IF nr_rezervari = 0 THEN
+        RAISE ex_rezervare_inexistenta;
+    ELSIF nr_rezervari > 1 THEN
+        RAISE TOO_MANY_ROWS;
+    ELSE
+        SELECT c.nume, f.titlul, r.data_achizitionare, r.sala_id, b.pret, a.nume_angajat 
+        INTO var_nume, var_titlu, var_data, var_sala, var_pret, var_angajat
+        FROM clienti c JOIN rezervari r ON c.client_id = r.client_id
+                       JOIN filme f ON r.film_id = f.film_id
+                       JOIN bilete b ON f.film_id = b.film_id
+                       JOIN angajati a ON b.angajat_id = a.angajat_id
+        WHERE r.client_id = id_client AND r.film_id = id_film;
+        DBMS_OUTPUT.PUT_LINE('Detalii rezervare:');
+        DBMS_OUTPUT.PUT_LINE('~Client: '|| var_nume);
+        DBMS_OUTPUT.PUT_LINE('~Film: '|| var_titlu);
+        DBMS_OUTPUT.PUT_LINE('~Data achizitiei: '|| var_data);
+        DBMS_OUTPUT.PUT_LINE('~Sala: '|| var_sala);
+        DBMS_OUTPUT.PUT_LINE('~Pret: '|| var_pret);
+        DBMS_OUTPUT.PUT_LINE('~Nume angajat: '|| var_angajat);
+    END IF;
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        RAISE_APPLICATION_ERROR(-20001, 'Nu au fost gasite date pentru clientul respectiv.'); 
+    WHEN TOO_MANY_ROWS THEN
+        RAISE_APPLICATION_ERROR(-20002, 'Clientul are mai multe rezervari la acest film!'); 
+    WHEN ex_film_inexistent THEN 
+        RAISE_APPLICATION_ERROR(-20003, 'Nu exista un film cu acest id.'); 
+    WHEN ex_rezervare_inexistenta THEN 
+        RAISE_APPLICATION_ERROR(-20004, 'Nu exista nicio rezervare pentru acest client');
+END;
+/
+
+BEGIN
+-- Pentru clientul inexistent
+    f9(20,7);
+END;
+/
+
+BEGIN
+-- Pentru filmul inexistent
+    f9(5,11);
+END;
+/
+
+BEGIN
+-- Rezervare inexistenta
+    f9(5,8);
+END;
+/
+
+BEGIN
+-- Client cu mai multe rezervari pentru un singur film
+    f9(4,5);
+END;
+/
+
+BEGIN
+-- Client cu o singura rezervare valida.
+    f9(2,3);
+END;
+/
+
+
+-- 10.
+CREATE OR REPLACE TRIGGER t10
+BEFORE INSERT ON filme
+DECLARE
+    nr_filme NUMBER;
+BEGIN
+    SELECT COUNT(film_id) INTO nr_filme
+    FROM filme;
+    
+    IF nr_filme >= 10 THEN
+        RAISE_APPLICATION_ERROR(-20010, 'Eroare: Nu se pot difuza mai mult de 10 filme momentan.');
+    END IF;
+END;
+/
+--Incerc sa inserez al 11-lea film.
+INSERT INTO filme(film_id, titlul, gen, an_lansare, regizor) 
+VALUES (11, 'Harry Potter', 'SF', to_date('19-09-2024', 'DD-MM-YYYY'), 'Chris Columbus');
+
+
+-- 11.
+CREATE OR REPLACE TRIGGER t11
+BEFORE INSERT OR UPDATE ON rezervari
+FOR EACH ROW
+DECLARE
+    var_data DATE;
+BEGIN
+    SELECT an_lansare INTO var_data
+    FROM filme
+    WHERE  film_id = :NEW.film_id;
+    
+    IF :NEW.data_achizitionare < var_data THEN
+        RAISE_APPLICATION_ERROR(-20011, 'Eroare: Data achizitionarii biletului nu este corecta.');
+    END IF;
+END;
+/
+--Am inserat inca un bilet pentru un film
+INSERT INTO bilete(bilet_id, client_id, film_id, nr_locuri, pret, angajat_id) 
+VALUES (16, 9, 2, 2, 60, 5);
+--Insa atunci cand inserez o data invalida pentru rezervare imi va aparea eroarea
+INSERT INTO rezervari(bilet_id, client_id, film_id, sala_id, data_achizitionare) 
+VALUES (16, 9, 2, 1, to_date('28-07-2023', 'DD-MM-YYYY'));
+
+
+-- 12.
+CREATE TABLE erori_proiect(
+    nume_baza VARCHAR2(50),
+    user_baza VARCHAR2(50),
+    eroare VARCHAR2(2000),
+    data_eroare DATE
+);
+
+CREATE TABLE modificari_proiect(
+    nume_baza VARCHAR2(50),
+    user_baza VARCHAR2(50),
+    modificare VARCHAR2(200),
+    tabel_modificat VARCHAR2(100),
+    data_modificare DATE
+);
+
+CREATE OR REPLACE TRIGGER t12
+AFTER CREATE OR ALTER OR DROP OR SERVERERROR ON SCHEMA
+DECLARE
+    var_event VARCHAR2(100);
+BEGIN
+    var_event := SYS.SYSEVENT;
+    IF var_event IN ('CREATE', 'ALTER', 'DROP') THEN 
+        INSERT INTO modificari_proiect(nume_baza, user_baza, modificare, tabel_modificat, data_modificare)
+        VALUES( SYS.DATABASE_NAME,
+            SYS.LOGIN_USER, 
+            SYS.SYSEVENT, 
+            SYS.DICTIONARY_OBJ_NAME,
+            SYSDATE);
+    ELSIF var_event = 'SERVERERROR' THEN
+        INSERT INTO erori_proiect(nume_baza, user_baza, eroare, data_eroare)
+        VALUES( SYS.DATABASE_NAME,
+            SYS.LOGIN_USER, 
+            SYS.SYSEVENT, 
+            SYSDATE);
+    END IF;
+END;
+/
+
+--1
+drop table exemplu;
+select *
+from erori_proiect;
+
+--2
+create table exemplu(id_ex NUMBER);
+select *
+from modificari_proiect;
+
+--3
+ALTER TABLE exemplu
+ADD nume_exemplu VARCHAR2(50);
+select *
+from modificari_proiect;
+
+--4
+drop table exemplu;
+select *
+from modificari_proiect;
+
+
+
+
